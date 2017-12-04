@@ -1,0 +1,8 @@
+.board {
+  width: 200px;
+  display: inline-block;
+  background-color: lightblue;
+  margin: 12px;
+  padding: 12px;
+  box-shadow: 1px 1px 5px #888888;
+}
