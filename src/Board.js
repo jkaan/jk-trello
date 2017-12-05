@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import './Board.css';
+import React from 'react'
+import './Board.css'
+import { PropTypes } from 'prop-types'
 
-class Board extends Component {
-  render() {
-    return (
-      <div className="board">
-        {this.props.name}
-      </div>
-    );
-  }
+const Board = ({ name }) => (
+  <div className="board">
+    {name}
+  </div>
+)
+
+Board.propTypes = {
+  name: PropTypes.string.isRequired
 }
 
-export default Board;
+export default Board
