@@ -1,12 +1,19 @@
 import React from 'react'
 import Board from './Board.js'
 import PropTypes from 'prop-types'
+import CreateBoard from './CreateBoard'
+import { Link } from 'react-router-dom'
 
 const BoardList = ({ boards }) => (
   <div>
-    {boards.map((board) => (
-      <Board name={board.boardName} key={board.boardId}/>
-    ))}
+    <CreateBoard />
+    <div>
+      {boards.map((board) => (
+        <Link to={"/b/" + board.boardId} key={board.boardId}>
+          <Board name={board.boardName} />
+        </Link>
+      ))}
+    </div>
   </div>
 )
 
