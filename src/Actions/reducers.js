@@ -25,7 +25,8 @@ function trelloApp(state = initialState, action) {
 
     // Update the board to add the list
     board = board.update('lists', lists => lists.push({
-      listName: action.listName
+      listName: action.listName,
+      listId: lists.size
     }));
 
     // Delete the original board from the boards
