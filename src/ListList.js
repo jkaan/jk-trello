@@ -2,17 +2,18 @@ import React from 'react'
 import List from './List.js'
 import PropTypes from 'prop-types'
 
-const ListList = ({ lists }) => (
+const ListList = ({ boardId, lists }) => (
   <div>
     <div>
       {lists.map((list) => (
-        <List name={list.listName} key={list.listId}/>
+        <List list={list} key={list.listId} boardId={boardId}/>
       ))}
     </div>
   </div>
 )
 
 ListList.propTypes = {
+  boardId: PropTypes.number.isRequired,
   lists: PropTypes.arrayOf(
     PropTypes.shape({
       listName: PropTypes.string.isRequired,

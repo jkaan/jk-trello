@@ -1,8 +1,16 @@
 .list {
   width: 200px;
   display: inline-block;
+  vertical-align: top;
   background-color: lightgray;
   margin: 12px;
   padding: 12px;
   box-shadow: 1px 1px 5px #888888;
+}
+
+.list-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 12px;
+  border-bottom: 1px solid gray;
 }
