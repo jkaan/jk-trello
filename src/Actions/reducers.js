@@ -42,7 +42,10 @@ export function rootReducer(state, action) {
         })).updateIn(
           ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cardIds'],
           cardIds => cardIds.push(cardIds.size)
-        ).deleteIn(['boards', action.boardId.toString(), 'lists', action.list]).toJS()
+        )
+        .deleteIn(['boards', action.boardId.toString(), 'lists', action.previousListId.toString(), 'cards', action.cardId])
+        .deleteIn(['boards', action.boardId.toString(), 'lists', action.previousListId.toString(), 'cardIds', action.cardId])
+        .toJS()
     default:
       return state
   }

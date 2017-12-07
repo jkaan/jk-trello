@@ -14,6 +14,7 @@ const listTarget = {
         monitor.getItem()['cardId'],
         monitor.getItem()['cardName'],
         props.boardId,
+        monitor.getItem()['currentListId'],
         props.list.listId
       )
     )
@@ -34,7 +35,7 @@ const List = ({ dispatch, list, boardId, cards, connectDropTarget }) => {
     <div className="list">
       <div className="list-name">{list.listName}</div>
       {cards.map((card, index) => (
-        <Card name={card.cardName} id={card.cardId} key={index}/>
+        <Card name={card.cardName} id={card.cardId} listId={list.listId} key={index}/>
       ))}
       <div>
         <form onSubmit={e => {

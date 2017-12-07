@@ -16,6 +16,6 @@ export function createCard(boardId, listId, cardName) {
   return { type: CREATE_CARD, boardId, listId, cardName }
 }
 
-export function moveCardToList(cardId, cardName, boardId, listId) {
-  return { type: MOVE_CARD_TO_LIST, cardId, cardName, boardId, listId }
+export function moveCardToList(cardId, cardName, boardId, previousListId, listId) {
+  return { type: MOVE_CARD_TO_LIST, cardId, cardName, boardId, previousListId, listId }
 }
