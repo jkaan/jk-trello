@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import ActiveBoard from './ActiveBoard'
+import { getBoardById } from './Actions/reducers'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    board: state.boards.find(board => board.boardId === parseInt(ownProps.match.params.id, 10))
+    board: getBoardById(state, parseInt(ownProps.match.params.id, 10))
   }
 }
 

@@ -1,40 +1,30 @@
 import { CREATE_BOARD, CREATE_LIST } from './actions.js'
 import { fromJS } from 'immutable'
 
-const initialState = {
-  boards: []
-}
-
-function trelloApp(state = initialState, action) {
+export function rootReducer(state, action) {
   const immutableState = fromJS(state);
   switch (action.type) {
     case CREATE_BOARD:
-      return immutableState.update('boards', boards => boards.push({
+      return immutableState.update('boards', boards => boards.set(boards.size, {
           boardName: action.boardName,
           boardId: boards.size,
           lists: []
-        }
-      )).toJS();
+        })
+      ).update('boardIds', boards => boards.push(boards.size)).toJS();
     case CREATE_LIST:
-    // Get the index of the board to add the list to
-    const boardIndex = immutableState.get('boards').findIndex(board => {
-      return board.get('boardId') === action.boardId
-    })
-    // Get the actual board
-    let board = immutableState.get('boards').get(boardIndex);
-
-    // Update the board to add the list
-    board = board.update('lists', lists => lists.push({
+    return immutableState.updateIn(['boards', action.boardId.toString(), 'lists'], lists => lists.push({
       listName: action.listName,
       listId: lists.size
-    }));
-
-    // Delete the original board from the boards
-    const boards = immutableState.get('boards').delete(boardIndex).push(board);
-    return immutableState.set('boards', boards).toJS();
+    })).toJS()
     default:
       return state
   }
 }
 
-export default trelloApp
+export function getBoardById(state, id) {
+  return state.boards[id]
+}
+
+export function getBoards(state) {
+  return state.boardIds.map(id => getBoardById(state, id));
+}

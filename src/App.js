@@ -3,15 +3,19 @@ import './App.css'
 import BoardContainer from './BoardContainer'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import trelloApp from './Actions/reducers'
+import { rootReducer } from './Actions/reducers'
 import ActiveBoardContainer from './ActiveBoardContainer'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
-let store = createStore(trelloApp, { boards: JSON.parse(localStorage.getItem('boards')) || [] })
+const initialState = {
+  boards: {},
+  boardIds: []
+}
+
+let store = createStore(rootReducer, JSON.parse(localStorage.getItem('state')) || initialState);
 
 store.subscribe(() => {
-  const { boards } = store.getState();
-  localStorage.setItem('boards', JSON.stringify(boards));
+  localStorage.setItem('state', JSON.stringify(store.getState()));
 })
 
 export default () => (
