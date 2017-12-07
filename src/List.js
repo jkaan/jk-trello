@@ -4,9 +4,19 @@ import { createCard } from './Actions/actions'
 import Card from './Card'
 import './List.css'
 import { DropTarget } from 'react-dnd'
+import { moveCardToList } from './Actions/actions'
 
 const listTarget = {
   drop(props, monitor) {
+    const { dispatch } = props
+    dispatch(
+      moveCardToList(
+        monitor.getItem()['cardId'],
+        monitor.getItem()['cardName'],
+        props.boardId,
+        props.list.listId
+      )
+    )
   }
 }
 
@@ -24,7 +34,7 @@ const List = ({ dispatch, list, boardId, cards, connectDropTarget }) => {
     <div className="list">
       <div className="list-name">{list.listName}</div>
       {cards.map((card, index) => (
-        <Card name={card.cardName} key={index}/>
+        <Card name={card.cardName} id={card.cardId} key={index}/>
       ))}
       <div>
         <form onSubmit={e => {

@@ -1,4 +1,4 @@
-import { CREATE_BOARD, CREATE_LIST, CREATE_CARD } from './actions.js'
+import { CREATE_BOARD, CREATE_LIST, CREATE_CARD, MOVE_CARD_TO_LIST } from './actions.js'
 import { fromJS } from 'immutable'
 
 export function rootReducer(state, action) {
@@ -27,11 +27,22 @@ export function rootReducer(state, action) {
       return immutableState.updateIn(
         ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cards'],
         cards => cards.set(cards.size, {
+          cardId: cards.size,
           cardName: action.cardName
         })).updateIn(
           ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cardIds'],
           cardIds => cardIds.push(cardIds.size)
         ).toJS();
+    case MOVE_CARD_TO_LIST:
+      return immutableState.updateIn(
+        ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cards'],
+        cards => cards.set(cards.size, {
+          cardId: action.cardId,
+          cardName: action.cardName
+        })).updateIn(
+          ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cardIds'],
+          cardIds => cardIds.push(cardIds.size)
+        ).deleteIn(['boards', action.boardId.toString(), 'lists', action.list]).toJS()
     default:
       return state
   }

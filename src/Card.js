@@ -9,7 +9,7 @@ function collect(connect, monitor) {
   }
 }
 
-const Card = ({ name, connectDragSource, isDragging }) => {
+const Card = ({ name, id, connectDragSource, isDragging }) => {
   return connectDragSource(
     <div className="card" style={{
       opacity: isDragging ? 0 : 1,
@@ -22,6 +22,9 @@ const Card = ({ name, connectDragSource, isDragging }) => {
 
 export default DragSource('card', {
   beginDrag(props) {
-    return {}
+    return {
+      cardId: props.id,
+      cardName: props.name
+    }
   }
 }, collect)(Card)
