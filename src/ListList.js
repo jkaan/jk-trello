@@ -1,12 +1,12 @@
 import React from 'react'
-import List from './List.js'
+import ListContainer from './ListContainer'
 import PropTypes from 'prop-types'
 
 const ListList = ({ boardId, lists }) => (
   <div>
     <div>
       {lists.map((list) => (
-        <List list={list} key={list.listId} boardId={boardId}/>
+        <ListContainer list={list} key={list.listId} boardId={boardId}/>
       ))}
     </div>
   </div>

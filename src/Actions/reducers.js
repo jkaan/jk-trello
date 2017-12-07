@@ -17,7 +17,8 @@ export function rootReducer(state, action) {
         {
           listName: action.listName,
           listId: lists.size,
-          cards: []
+          cards: {},
+          cardIds: []
         }
       ))
       .updateIn(['boards', action.boardId.toString(), 'listIds'], listIds => listIds.push(listIds.size))
@@ -25,9 +26,12 @@ export function rootReducer(state, action) {
     case CREATE_CARD:
       return immutableState.updateIn(
         ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cards'],
-        cards => cards.push({
+        cards => cards.set(cards.size, {
           cardName: action.cardName
-        })).toJS();
+        })).updateIn(
+          ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cardIds'],
+          cardIds => cardIds.push(cardIds.size)
+        ).toJS();
     default:
       return state
   }
@@ -47,4 +51,12 @@ export function getListById(state, boardId, listId) {
 
 export function getLists(state, boardId) {
   return state.boards[boardId].listIds.map(id => getListById(state, boardId, id));
+}
+
+export function getCardById(state, boardId, listId, cardId) {
+  return state.boards[boardId].lists[listId].cards[cardId]
+}
+
+export function getCards(state, boardId, listId) {
+  return state.boards[boardId].lists[listId].cardIds.map(id => getCardById(state, boardId, listId, id))
 }

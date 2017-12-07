@@ -1,12 +1,13 @@
 import { connect } from 'react-redux'
-import ListList from './ListList'
-import { getLists } from './Actions/reducers'
+import List from './List'
+import { getCards } from './Actions/reducers'
 
 const mapStateToProps = (state, ownProps) => {
   return {
     boardId: ownProps.boardId,
-    lists: getLists(state, ownProps.boardId)
+    list: ownProps.list,
+    cards: getCards(state, ownProps.boardId, ownProps.list.listId)
   }
 }
 
-export default connect(mapStateToProps)(ListList)
+export default connect(mapStateToProps)(List)
