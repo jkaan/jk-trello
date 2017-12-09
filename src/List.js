@@ -9,6 +9,12 @@ import { moveCardToList } from './Actions/actions'
 const listTarget = {
   drop(props, monitor) {
     const { dispatch } = props
+
+    // If current list is same as target list do nothing
+    if (monitor.getItem()['currentListId'] === props.list.listId) {
+      return
+    }
+
     dispatch(
       moveCardToList(
         monitor.getItem()['cardId'],

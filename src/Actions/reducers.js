@@ -1,50 +1,56 @@
 import { CREATE_BOARD, CREATE_LIST, CREATE_CARD, MOVE_CARD_TO_LIST } from './actions.js'
 import { fromJS } from 'immutable'
+import _ from 'lodash'
 
 export function rootReducer(state, action) {
   const immutableState = fromJS(state);
   switch (action.type) {
     case CREATE_BOARD:
-      return immutableState.update('boards', boards => boards.set(boards.size, {
+      const boardId = _.uniqueId();
+      return immutableState.update('boards', boards => boards.set(boardId, {
           boardName: action.boardName,
-          boardId: boards.size,
+          boardId: boardId,
           lists: {},
           listIds: []
         })
-      ).update('boardIds', boards => boards.push(boards.size)).toJS();
+      ).update('boardIds', boards => boards.push(boardId)).toJS();
     case CREATE_LIST:
-      return immutableState.updateIn(['boards', action.boardId.toString(), 'lists'], lists => lists.set(lists.size,
+      const listId = _.uniqueId()
+      return immutableState.updateIn(['boards', action.boardId.toString(), 'lists'], lists => lists.set(listId,
         {
           listName: action.listName,
-          listId: lists.size,
+          listId: listId,
           cards: {},
           cardIds: []
         }
       ))
-      .updateIn(['boards', action.boardId.toString(), 'listIds'], listIds => listIds.push(listIds.size))
+      .updateIn(['boards', action.boardId.toString(), 'listIds'], listIds => listIds.push(listId))
       .toJS()
     case CREATE_CARD:
+      const cardId = _.uniqueId()
       return immutableState.updateIn(
         ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cards'],
-        cards => cards.set(cards.size, {
-          cardId: cards.size,
+        cards => cards.set(cardId, {
+          cardId: cardId,
           cardName: action.cardName
         })).updateIn(
           ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cardIds'],
-          cardIds => cardIds.push(cardIds.size)
+          cardIds => cardIds.push(cardId)
         ).toJS();
     case MOVE_CARD_TO_LIST:
       return immutableState.updateIn(
         ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cards'],
-        cards => cards.set(cards.size, {
+        cards => cards.set(action.cardId, {
           cardId: action.cardId,
           cardName: action.cardName
         })).updateIn(
           ['boards', action.boardId.toString(), 'lists', action.listId.toString(), 'cardIds'],
-          cardIds => cardIds.push(cardIds.size)
+          cardIds => cardIds.push(action.cardId)
         )
         .deleteIn(['boards', action.boardId.toString(), 'lists', action.previousListId.toString(), 'cards', action.cardId])
-        .deleteIn(['boards', action.boardId.toString(), 'lists', action.previousListId.toString(), 'cardIds', action.cardId])
+        .updateIn(['boards', action.boardId.toString(), 'lists', action.previousListId.toString(), 'cardIds'],
+          cardIds => cardIds.delete(cardIds.indexOf(action.cardId))
+        )
         .toJS()
     default:
       return state
